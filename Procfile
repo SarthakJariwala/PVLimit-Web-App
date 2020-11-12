@@ -1,1 +1,1 @@
-web: panel serve --address="0.0.0.0" --port=$PORT sqcalculator.ipynb --allow-websocket-origin=sqcalculator.herokuapp.com
+web: sh setup.sh && streamlit run app.py
