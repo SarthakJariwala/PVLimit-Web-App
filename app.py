@@ -1,24 +1,70 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+import base64
 import altair as alt
 import scipy.constants as constants
 from scipy.integrate import simps, quad
 from scipy.interpolate import splrep, splint
 from scipy.optimize import fmin
 
+
+st.set_page_config(
+    page_title="SQ-Calculator",
+)
+
 st.write("# Shockley-Queisser Limit Calculator")
 
-with st.beta_expander("Written by:"):
+st.write("""
+    Calculate your solar cell's maximum theoretical efficiency 
+    along with other device metrics.
+    
+    **Plot & download** the J-V curve data 
+    as well as the device metrics as a function of bandgap.
+    """
+)
+
+with st.beta_expander("Written by..."):
     st.write("""
     Original code was written by **Dr. Mark Ziffer** as a 
     graduate student in the **Ginger lab at the University of
-    Washington**.
+    Washington**
 
-    Modified and deployed to web by **Sarthak Jariwala** (jariwala@uw.edu),
-     graduate student in the Ginger lab.
+    Modified and deployed to web by **Sarthak Jariwala** (jariwala@uw.edu), 
+    graduate student in the Ginger lab.
 
-    Code available at https://github.com/SarthakJariwala/Shockley-Queisser-Web-App
+    Code for this application is available online at 
+    https://github.com/SarthakJariwala/Shockley-Queisser-Web-App
+
+    Original code was based on the code of Steve Byrnes (http://sjbyrnes.com/sq.html) 
+    and was made significantly faster using spline integration.
+    
+    *Reference: Shockley, W. & Queisser, H. J. J. Appl. Phys. 32, 510, doi:10.1063/1.1736034 (1961)*
+    """)
+
+with st.beta_expander("License : The MIT License (MIT)"):
+    st.write("""
+    The MIT License (MIT)
+
+    Copyright (c) 2020 Sarthak Jariwala
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
     """)
 
 h = constants.physical_constants['Planck constant'][0] # units of J*s
@@ -154,19 +200,28 @@ bandgap = b_col.slider("Bandgap (eV)", min_value=0.5, max_value=3., value=1.63)
 
 df, df_2, maxpcemeta = calculate_SQ(Tcell=cell_temperature, bandgap=bandgap)
 
-st.write("## Device Metrics")
+st.write("## Device Metrics for ", f"{bandgap} eV at {cell_temperature} K")
 st.write(f"J$_{'s'}$$_{'c'}$ = {maxpcemeta[5]:.2f} mA/cm$^{2}$")
 st.write(f"V$_{'o'}$$_{'c'}$ = {maxpcemeta[6]:.2f} V")
 st.write(f"FF = {maxpcemeta[4]:.2f}")
 st.write(f"PCE = {maxpcemeta[3] * 100:.2f} %")
 
-st.write("## Plots")
+st.write("## Plots & Data")
 
 c = alt.Chart(df_2).mark_line(point=True).encode(
     x="Voltage (V)", y="Current Density (mA/cm2)"
 )
 with st.beta_expander("J-V Curve"):
     st.altair_chart(c, use_container_width=True)
+
+    # covert to csv for download
+    csv = df_2.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+    href = f'<a href="data:file/csv;base64,{b64}">Download CSV File</a> (right-click and save as &lt;some_name&gt;.csv)'
+    st.markdown(href, unsafe_allow_html=True)
+    # display dataframe
+    st.dataframe(df_2)
+
 
 c_pce = alt.Chart(df).mark_line(point=True).encode(
     x="Bandgap (eV)", y="PCE (%)"
@@ -192,3 +247,11 @@ with st.beta_expander("Device metrics as a function of bandgap"):
     col_01.altair_chart(c_voc, use_container_width=True)
     col_10.altair_chart(c_jsc, use_container_width=True)
     col_11.altair_chart(c_ff, use_container_width=True)
+
+    # covert to csv for download
+    csv = df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+    href = f'<a href="data:file/csv;base64,{b64}">Download CSV File</a> (right-click and save as &lt;some_name&gt;.csv)'
+    st.markdown(href, unsafe_allow_html=True)
+    # display dataframe
+    st.dataframe(df)
