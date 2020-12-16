@@ -85,10 +85,10 @@ def load_data(filename=r"ASTMG173.csv"):
     #First convert AM1.5 spectrum from W/m^2/nm to W/m^2/ev
     astmg173 = np.loadtxt(filename, delimiter=",", skiprows=2)
     am15_wav = np.copy(astmg173[:,0]) #AM1.5 wavelength axis in nm
-    am15 = np.copy(astmg173[:,1]) #AM1.5 in units of W/m^2/nm = J/s*m^2/nm
+    am15 = np.copy(astmg173[:,2]) #AM1.5 in units of W/m^2/nm = J/s*m^2/nm
 
     #Integrate over nm to check that total power density = 1000 W/m^2
-    # total_power_nm = simps(am15, x = am15_wav)
+    total_power_nm = simps(am15, x = am15_wav)
 
     am15_ev = h_ev * (c_nm) / (am15_wav )
     am15_wats_ev = am15 * (h_ev * c_nm/ ((am15_ev) ** 2.0))
@@ -201,10 +201,10 @@ bandgap = b_col.slider("Bandgap (eV)", min_value=0.5, max_value=3., value=1.63)
 df, df_2, maxpcemeta = calculate_SQ(Tcell=cell_temperature, bandgap=bandgap)
 
 st.write("## Device Metrics for ", f"{bandgap} eV at {cell_temperature} K")
-st.write(f"J$_{'s'}$$_{'c'}$ = {maxpcemeta[5]:.2f} mA/cm$^{2}$")
-st.write(f"V$_{'o'}$$_{'c'}$ = {maxpcemeta[6]:.2f} V")
-st.write(f"FF = {maxpcemeta[4]:.2f}")
-st.write(f"PCE = {maxpcemeta[3] * 100:.2f} %")
+st.write(f"J$_{'s'}$$_{'c'}$ = {maxpcemeta[5]:.3f} mA/cm$^{2}$")
+st.write(f"V$_{'o'}$$_{'c'}$ = {maxpcemeta[6]:.3f} V")
+st.write(f"FF = {maxpcemeta[4]:.3f}")
+st.write(f"PCE = {maxpcemeta[3] * 100:.3f} %")
 
 st.write("## Plots & Data")
 
