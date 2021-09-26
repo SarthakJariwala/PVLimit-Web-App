@@ -10,10 +10,10 @@ from scipy.optimize import fmin
 
 
 st.set_page_config(
-    page_title="SQ-Calculator",
+    page_title="PV-limit-calculator",
 )
 
-st.write("# Shockley-Queisser Limit Calculator")
+st.write("# Thermodynamic Limit Calculator")
 
 st.write("""
     Calculate your solar cell's maximum theoretical efficiency 
@@ -26,27 +26,22 @@ st.write("""
 
 with st.beta_expander("Written by..."):
     st.write("""
-    Original code was written by **Dr. Mark Ziffer** as a 
+    A lot of the original code was written by **Dr. Mark Ziffer** as a 
     graduate student in the **Ginger lab at the University of
     Washington**
 
-    Modified and deployed to web by **Sarthak Jariwala** (jariwala@uw.edu), 
+    Modified and deployed to web by [**Sarthak Jariwala**](https://www.sarthakjariwala.com/) , 
     graduate student in the Ginger lab.
 
     Code for this application is available online at 
-    https://github.com/SarthakJariwala/Shockley-Queisser-Web-App
-
-    Original code was based on the code of Steve Byrnes (http://sjbyrnes.com/sq.html) 
-    and was made significantly faster using spline integration.
-    
-    *Reference: Shockley, W. & Queisser, H. J. J. Appl. Phys. 32, 510, doi:10.1063/1.1736034 (1961)*
+    https://github.com/SarthakJariwala/PVLimit-Web-App
     """)
 
 with st.beta_expander("License : The MIT License (MIT)"):
     st.write("""
     The MIT License (MIT)
 
-    Copyright (c) 2020 Sarthak Jariwala
+    Copyright (c) 2020-2021 Sarthak Jariwala
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
