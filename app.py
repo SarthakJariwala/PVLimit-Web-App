@@ -208,11 +208,9 @@ c = alt.Chart(df_2).mark_line(point=True).encode(
 with st.expander("J-V Curve"):
     st.altair_chart(c, use_container_width=True)
 
-    # covert to csv for download
-    csv = df_2.to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-    href = f'<a href="data:file/csv;base64,{b64}">Download CSV File</a> (right-click and save as &lt;some_name&gt;.csv)'
-    st.markdown(href, unsafe_allow_html=True)
+
+    csv = df_2.to_csv(index=False).encode('utf-8')
+    st.download_button("Download J-V Data", data=csv, file_name=f"jv_{bandgap}_{cell_temperature}.csv", mime='text/csv')
     # display dataframe
     st.dataframe(df_2)
 
@@ -243,9 +241,7 @@ with st.expander("Device metrics as a function of bandgap"):
     col_11.altair_chart(c_ff, use_container_width=True)
 
     # covert to csv for download
-    csv = df.to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-    href = f'<a href="data:file/csv;base64,{b64}">Download CSV File</a> (right-click and save as &lt;some_name&gt;.csv)'
-    st.markdown(href, unsafe_allow_html=True)
+    csv = df.to_csv(index=False).encode('utf-8')
+    st.download_button("Download Metrics  Data", data=csv, file_name=f'jvff_vs_bandgap_{cell_temperature}.csv', mime='text/csv')
     # display dataframe
     st.dataframe(df)
