@@ -24,7 +24,7 @@ st.write("""
     """
 )
 
-with st.beta_expander("Written by..."):
+with st.expander("Written by..."):
     st.write("""
     A lot of the original code was written by **Dr. Mark Ziffer** as a 
     graduate student in the **Ginger lab at the University of
@@ -37,7 +37,7 @@ with st.beta_expander("Written by..."):
     https://github.com/SarthakJariwala/PVLimit-Web-App
     """)
 
-with st.beta_expander("License : The MIT License (MIT)"):
+with st.expander("License : The MIT License (MIT)"):
     st.write("""
     The MIT License (MIT)
 
@@ -206,7 +206,7 @@ st.write("## Plots & Data")
 c = alt.Chart(df_2).mark_line(point=True).encode(
     x="Voltage (V)", y="Current Density (mA/cm2)"
 )
-with st.beta_expander("J-V Curve"):
+with st.expander("J-V Curve"):
     st.altair_chart(c, use_container_width=True)
 
     # covert to csv for download
@@ -234,7 +234,7 @@ c_ff = alt.Chart(df).mark_line(point=True).encode(
     x="Bandgap (eV)", y="Fill Factor"
 )
 
-with st.beta_expander("Device metrics as a function of bandgap"):
+with st.expander("Device metrics as a function of bandgap"):
     col_00, col_01 = st.beta_columns(2)
     col_10, col_11 = st.beta_columns(2)
 
