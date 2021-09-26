@@ -13,7 +13,7 @@ st.set_page_config(
     page_title="PV-limit-calculator",
 )
 
-st.write("# Thermodynamic Limit Calculator")
+st.write("# PV Thermodynamic Limit Calculator")
 
 st.write("""
     Calculate your solar cell's maximum theoretical efficiency 
@@ -26,12 +26,11 @@ st.write("""
 
 with st.expander("Written by..."):
     st.write("""
-    A lot of the original code was written by **Dr. Mark Ziffer** as a 
-    graduate student in the **Ginger lab at the University of
+    PV thermodynamic limit calculation part of the code was written by **Mark Ziffer** as a 
+    graduate student in **Ginger lab at the University of
     Washington**
 
-    Modified and deployed to web by [**Sarthak Jariwala**](https://www.sarthakjariwala.com/) , 
-    graduate student in the Ginger lab.
+    Code was modified and deployed to web by [**Sarthak Jariwala**](https://www.sarthakjariwala.com/).
 
     Code for this application is available online at 
     https://github.com/SarthakJariwala/PVLimit-Web-App
@@ -189,7 +188,7 @@ def calculate_SQ(Tcell=300., bandgap=1.63):
 
 st.write("### Select the temperature (K) and bandgap (eV) of interest")
 
-t_col, b_col = st.beta_columns(2)
+t_col, b_col = st.columns(2)
 cell_temperature = t_col.slider("Temperature (K)", min_value=100, max_value=500, value=300)
 bandgap = b_col.slider("Bandgap (eV)", min_value=0.5, max_value=3., value=1.63)
 
@@ -235,8 +234,8 @@ c_ff = alt.Chart(df).mark_line(point=True).encode(
 )
 
 with st.expander("Device metrics as a function of bandgap"):
-    col_00, col_01 = st.beta_columns(2)
-    col_10, col_11 = st.beta_columns(2)
+    col_00, col_01 = st.columns(2)
+    col_10, col_11 = st.columns(2)
 
     col_00.altair_chart(c_pce, use_container_width=True)
     col_01.altair_chart(c_voc, use_container_width=True)
